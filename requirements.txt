@@ -1,0 +1,5 @@
+Django==4.2.1
+django-sendgrid-v5==0.6.8
+openai==0.27.6
+stripe==5.4.0
+django-cors-headers==3.14.0

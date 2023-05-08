@@ -1,0 +1,58 @@
+Detailed Master Plan for the Chatbot API Project
+
+Executive Summary:
+
+The goal of this project is to create a chatbot API for small business owners, allowing them to quickly and easily create chatbots tailored to their specific business. The system will leverage the OpenAI API to generate responses based on the user's unique context. The application will include a landing page, an 'ask' API endpoint, a passwordless login mechanism, user settings area, and a chatbot page for testing. The tech stack consists of Python 3.10, Django, HTMX, Django Rest Framework, Postgres, OpenAI API, Stripe, and PyTest.
+
+List of Steps:
+
+Design the data models for the application:
+a. Create a custom User model that extends Django's AbstractUser model.
+b. Create an APIKey model with a ForeignKey to the User model and an indexed 'api_key' field.
+c. Create a Context model with a ForeignKey to the User model to store user-specific contexts.
+d. Generate the required migrations for these models.
+
+Implement the 'ask' API endpoint using Django Rest Framework:
+a. Create a view called 'ask_question' that takes the question and user's API key as input.
+b. In the 'ask_question' view, fetch the user's context using the provided API key and construct a prompt by combining the context and question.
+c. Submit the prompt to the OpenAI API and return the response to the user.
+d. Add rate limiting to the 'ask_question' endpoint to prevent abuse.
+
+Create a passwordless login mechanism:
+a. Implement a view called 'send_login_code' that takes the user's email as input and sends a unique login code to the user's email.
+b. Implement a view called 'validate_login_code' that takes the user's email and entered code as input, validates the code, and logs the user in if the code is correct.
+c. Create URL routes for the 'send_login_code' and 'validate_login_code' views.
+
+Implement the user settings area with two pages:
+a. Create an 'AccountSettingsView' class-based view that handles Stripe subscription management.
+b. Create a 'ChatbotSettingsView' class-based view that allows users to modify their context and test the API.
+c. Add URL routes for the 'AccountSettingsView' and 'ChatbotSettingsView'.
+
+Integrate HTMX to create a dynamic frontend for the user settings area and chatbot page:
+a. Create the necessary HTML templates for the Account Settings and Chatbot pages with HTMX attributes.
+b. Add JavaScript as needed to handle AJAX requests and enhance interactivity.
+
+Design the landing page:
+a. Create an HTML template with a gradient of pink and blue and include a textbox for users to send questions using a special API key.
+b. Implement a view called 'landing_page_view' that demonstrates the product functionality by answering questions about the product itself.
+c. Create a URL route for the 'landing_page_view'.
+
+Implement the necessary views, URL routing, and templates for the landing page, passwordless login, and user settings area.
+
+Integrate Stripe for handling subscription management:
+a. Add Stripe API keys to the Django settings.
+b. Implement Stripe subscription handling in the 'AccountSettingsView'.
+
+Write tests for the application using PyTest:
+a. Test the 'ask_question' API endpoint.
+b. Test the passwordless login mechanism.
+c. Test the user settings area views and functionality.
+
+Configure the application to use Postgres as the database:
+a. Update the Django settings to use the Postgres database backend.
+
+I have currently implemented:
+ - landing_page.html with question textbox and login button.
+ - URLs for landing page and secure area.
+ - Login functionality that takes user to secure area.
+ - The secure area has a textbox and submit that lets the user update their context and also send test questions to the API that uses their context. 

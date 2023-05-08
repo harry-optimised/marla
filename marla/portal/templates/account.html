@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+<script src="https://js.stripe.com/v3/"></script>
+
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .title {
+        font-size: 3rem;
+    }
+
+    .text {
+        font-size: 2.5rem;
+    }
+
+    .small-text {
+        font-size: 2rem;
+    }
+
+    .background {
+        background: linear-gradient(-45deg, rgb(248, 224, 240), white 30% 70%, rgb(217, 242, 248));
+        height: 100%;
+        display: flex;
+    }
+
+    .flat-button {
+        background-color: transparent;
+        border: 1px solid gray;
+        color: gray;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        transition-duration: 0.1s;
+        cursor: pointer;
+        margin-top: 8px;
+    }
+
+    .flat-button:hover {
+        background-color: rgba(0, 0, 0, 0.1); /* a very light gray on hover */
+        color: black;
+    }
+
+    .sidebar {
+        height: 100%;
+        
+        background-color: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+    }
+
+    .sidebar a {
+        margin: 10px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .sidebar a:hover {
+        color: #007bff;
+    }
+
+    .content-area {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        height: 100%;
+        width: 100%;
+    }
+
+    .padded-section {
+        margin-top: 32px;
+        width: 100%
+    }
+
+    .progress-container {
+        width: 60%;
+        background-color: #f3f3f3;
+        position: relative;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .progress-bar {
+        height: 100%;
+        background-color: #4CAF50;
+        position: absolute;
+        border-radius: 5px;
+        transition: width 0.5s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .progress-text {
+        font-size: 14px;
+        color: gray;
+        font-weight: bold;
+    }
+
+
+</style>
+
+
+<div class="background">
+    <div class="sidebar">
+        <a href="{% url 'account' %}">
+            <img src="https://img.icons8.com/cotton/64/null/gender-neutral-user--v3.png"/ alt="Account Settings" title="Account Settings">
+        </a>
+        <a href="{% url 'settings' %}">
+            <img src="https://img.icons8.com/cotton/64/null/chat.png" alt="Chat Settings" title="Chat Settings"  style="opacity: 0.5">
+        </a>
+        <a href="{% url 'integrations' %}">
+            <img src="https://img.icons8.com/cotton/64/null/puzzle.png" alt="Integrations" title="Integrations" style="opacity: 0.5">
+        </a>
+    </div>
+    <div class="content-area ">
+        <h2 class="title">Hey there, {{ user.email }}</h2>
+        <hr>
+        
+        {% if user.is_premium %}
+            <h2 class="text">You are susbcribed to the premium plan.</h2>
+            <p>You are currently subscribed to the Premium Plan. To cancel your subscription, click the button below:</p>
+            <form id="cancel-subscription-form">
+                <button type="submit" class="flat-button">Cancel Subscription</button>
+            </form>
+        {% else %}
+            <h2 class="text">You are on the free plan.</h2>
+            <p class="small-text">The free plan has a limited number of questions that can be asked. Your remaining quota is shown below.</p>
+            <div class="progress-container">                
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <span class="progress-text" id="progress-text"></span>
+            <br>
+            <h2 class="text">What you get on the Premium Plan.</h2>
+            <p class="small-text">The premium plan has no limit on the number of questions that can be asked.</p>
+            <p class="small-text">Subscribe today for £4.99 a month.</p>
+            <form id="subscription-form">
+                <button type="submit" class="flat-button" id="subscribe-button">Subscribe to Premium Plan</button>
+            </form>
+        {% endif %}
+               
+    </div>
+</div>
+
+<!-- Include Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const maxQuestions = parseInt('{{ max_questions }}');
+        const remainingQuestions = parseInt('{{ remaining_questions }}');
+        const progressBar = document.getElementById("progress-bar");
+        const progressText = document.getElementById("progress-text");
+
+        const progressPercentage = (remainingQuestions / maxQuestions) * 100;
+        progressBar.style.width = progressPercentage + "%";
+        progressText.textContent = `${remainingQuestions} questions remaining`;
+    });
+
+
+    const stripe = Stripe('pk_test_51N5VPxH451kFmPn7Fm1rnn9AaV9tlRIQTq0RyX21CButGRuUbrKv0W7YQ6lYEQa3TTEDzf9eOuK40MWE1LVf5ILh00nZ4PqDXL');
+
+    // For new subscription
+    const subscriptionForm = document.getElementById('subscription-form');
+    if (subscriptionForm) {
+        document.getElementById('subscribe-button').addEventListener('click', async () => {
+            event.preventDefault();
+            const response = await fetch('/account/create-checkout-session/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            });
+            
+            const data = await response.json();
+            stripe.redirectToCheckout({ sessionId: data.sessionId });
+        });
+    }
+
+    // For canceling the subscription
+    const cancelSubscriptionForm = document.getElementById('cancel-subscription-form');
+    if (cancelSubscriptionForm) {
+        cancelSubscriptionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const response = await fetch('/account/cancel-subscription/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                console.error('Failed to cancel subscription');
+            }
+        });
+    }
+</script>
+
+<script>
+</script>
+{% endblock %}
+

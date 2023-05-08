@@ -1,0 +1,35 @@
+This is a demonstration context for a typical business.
+
+Business Info:
+We are a business that sells widgets. 
+We have been in business for 10 years. 
+We have 10 employees. 
+
+We offer the following services:
+- Service 1 - Whole room painting of any colour.
+- Service 2 - Plumbing and fitting of bathrooms.
+- Service 3 - Furniture building and repair.
+
+Our opening hours are:
+- Monday: 9am - 5pm
+- Tuesday: 9am - 5pm
+- Wednesday: 9am - 5pm
+- Thursday: 9am - 5pm
+- Friday: 9am - 5pm
+- Saturday: Closed
+- Sunday: Closed
+
+Our address is:
+123 Fake Street
+Fake Town
+Fake City
+Fake Country
+
+Our phone number is:
++44 1234 567890
+
+Our email address is:
+not_real@marla.ai
+
+Our website is:
+https://marla.ai
