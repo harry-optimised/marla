@@ -1,163 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% load static %}
-
-<!-- Include Bootstrap CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-
-<style>
-    body, html {
-        height: 100%;
-        margin: 0;
-        font-family: 'Roboto', sans-serif;
-    }
-
-    .title {
-        font-size: 3rem;
-    }
-
-    .subtitle {
-        font-size: 2.5rem;
-    }
-
-    .text {
-        font-size: 2rem;
-    }
-
-    .background {
-        background: linear-gradient(-45deg, rgb(248, 224, 240), white 30% 70%, rgb(217, 242, 248));
-        height: 100%;
-        display: flex;
-    }
-
-    .flat-button {
-        background-color: transparent;
-        border: 1px solid gray;
-        color: gray;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        transition-duration: 0.1s;
-        cursor: pointer;
-        margin-top: 8px;
-    }
-
-    .flat-button:hover {
-        background-color: rgba(0, 0, 0, 0.1); /* a very light gray on hover */
-        color: black;
-    }
-
-    .sidebar {
-        height: 100%;
-        
-        background-color: #f8f9fa;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: start;
-    }
-
-    .sidebar a {
-        margin: 10px;
-        text-decoration: none;
-        color: #333;
-    }
-
-    .sidebar a:hover {
-        color: #007bff;
-    }
-
-    .content-area {
-        padding: 32px;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        height: 100%;
-        width: 100%;
-    }
-
-    .padded-section {
-        margin-top: 32px;
-        width: 100%
-    }
-
-    .dot-pulse {
-        position: relative;
-        left: -9999px;
-        width: 10px;
-        height: 10px;
-        border-radius: 5px;
-        background-color: gray;
-        color: gray;
-        box-shadow: 9999px 0 0 -5px;
-        animation: dot-pulse 1.5s infinite linear;
-        animation-delay: 0.25s;
-        opacity: 0.5;
-        }
-        .dot-pulse::before, .dot-pulse::after {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        top: 0;
-        width: 10px;
-        height: 10px;
-        border-radius: 5px;
-        background-color: gray;
-        color: gray;
-        opacity: 0.5;
-        }
-        .dot-pulse::before {
-        box-shadow: 9984px 0 0 -5px;
-        animation: dot-pulse-before 1.5s infinite linear;
-        animation-delay: 0s;
-        }
-        .dot-pulse::after {
-        box-shadow: 10014px 0 0 -5px;
-        animation: dot-pulse-after 1.5s infinite linear;
-        animation-delay: 0.5s;
-        }
-
-        @keyframes dot-pulse-before {
-        0% {
-            box-shadow: 9984px 0 0 -5px;
-        }
-        30% {
-            box-shadow: 9984px 0 0 2px;
-        }
-        60%, 100% {
-            box-shadow: 9984px 0 0 -5px;
-        }
-        }
-        @keyframes dot-pulse {
-        0% {
-            box-shadow: 9999px 0 0 -5px;
-        }
-        30% {
-            box-shadow: 9999px 0 0 2px;
-        }
-        60%, 100% {
-            box-shadow: 9999px 0 0 -5px;
-        }
-        }
-        @keyframes dot-pulse-after {
-        0% {
-            box-shadow: 10014px 0 0 -5px;
-        }
-        30% {
-            box-shadow: 10014px 0 0 2px;
-        }
-        60%, 100% {
-            box-shadow: 10014px 0 0 -5px;
-        }
-    }
-</style>
-
 <script>
     async function updateContext() {
         const contextInput = document.getElementById('contextInput');
@@ -235,7 +78,7 @@
     document.addEventListener('DOMContentLoaded', setupEventListeners);
 </script>
 
-<div class="background">
+<div class="canvas">
     <div class="sidebar">
         <a href="{% url 'account' %}">
             <img src="https://img.icons8.com/cotton/64/null/gender-neutral-user--v3.png"/ alt="Account Settings" title="Account Settings"  style="opacity: 0.5">
@@ -247,7 +90,7 @@
             <img src="https://img.icons8.com/cotton/64/null/puzzle.png" alt="Integrations" title="Integrations" style="opacity: 0.5">
         </a>
     </div>
-    <div class="content-area" style="overflow-y: scroll;">
+    <div class="content">
         <h2 class="title">Hey there, {{ user.email }}</h2>
         
         <div class="form-group padded-section">
@@ -298,11 +141,5 @@
         </div>
     </div>
 </div>
-
-<!-- Include Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-<script>
-</script>
 {% endblock %}
 

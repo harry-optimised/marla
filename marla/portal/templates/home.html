@@ -1,216 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% load static %}
 
-<!-- Include Bootstrap CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+<div class="canvas">
 
-<style>
-    body, html {
-        height: 100%;
-        margin: 0;
-    }
-
-    .background {
-        background: linear-gradient(-45deg, rgb(248, 224, 240), white 30% 70%, rgb(217, 242, 248));
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-
-    .title {
-        font-family: 'Roboto', sans-serif;
-        font-size: 7rem;
-        font-weight: bold;
-        color: rgb(63, 112, 185);
-    }
-
-    .marketing-text {
-        font-family: 'Roboto', sans-serif;
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .box-title {
-        font-family: 'Roboto', sans-serif;
-        font-size: 2.5rem;
-        color: rgb(63, 112, 185);
-        font-weight: bold;
-        margin-bottom: 1rem;
-    }
-
-    .box-text {
-        font-family: 'Roboto', sans-serif;
-        font-size: 2rem;
-
-        margin-top: 1rem;
-        opacity: 0.7;        
-        text-align: center;
-    }
-
-    .answer-text {
-        font-family: 'Roboto', sans-serif;
-        font-size: 2rem;
-        margin-top: 1rem;
-        width: 600px;
-        opacity: 0.7;        
-        text-align: center;
-    }
-
-    .flat-button {
-        background-color: transparent;
-        border: 1px solid gray;
-        color: gray;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        transition-duration: 0.1s;
-        cursor: pointer;
-    }
-
-    .flat-button:hover {
-        background-color: rgba(0, 0, 0, 0.1); /* a very light gray on hover */
-        color: black;
-    }
-
-
-
-
-  .dot-pulse {
-  position: relative;
-  left: -9999px;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: gray;
-  color: gray;
-  box-shadow: 9999px 0 0 -5px;
-  animation: dot-pulse 1.5s infinite linear;
-  animation-delay: 0.25s;
-  opacity: 0.5;
-}
-.dot-pulse::before, .dot-pulse::after {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: gray;
-  color: gray;
-  opacity: 0.5;
-}
-.dot-pulse::before {
-  box-shadow: 9984px 0 0 -5px;
-  animation: dot-pulse-before 1.5s infinite linear;
-  animation-delay: 0s;
-}
-.dot-pulse::after {
-  box-shadow: 10014px 0 0 -5px;
-  animation: dot-pulse-after 1.5s infinite linear;
-  animation-delay: 0.5s;
-}
-
-@keyframes dot-pulse-before {
-  0% {
-    box-shadow: 9984px 0 0 -5px;
-  }
-  30% {
-    box-shadow: 9984px 0 0 2px;
-  }
-  60%, 100% {
-    box-shadow: 9984px 0 0 -5px;
-  }
-}
-@keyframes dot-pulse {
-  0% {
-    box-shadow: 9999px 0 0 -5px;
-  }
-  30% {
-    box-shadow: 9999px 0 0 2px;
-  }
-  60%, 100% {
-    box-shadow: 9999px 0 0 -5px;
-  }
-}
-@keyframes dot-pulse-after {
-  0% {
-    box-shadow: 10014px 0 0 -5px;
-  }
-  30% {
-    box-shadow: 10014px 0 0 2px;
-  }
-  60%, 100% {
-    box-shadow: 10014px 0 0 -5px;
-  }
-}
-</style>
-
-<div class="background">
-
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around; height: 100%">
+    <div class="small-content">
         
-        <div>
-            <div style="width: 100%; display: flex; justify-content: center;">
-                <div style="display: flex; width: 60%; padding: 20px; justify-content: space-between;"> 
-                    <div style="display: flex; flex-direction: column; padding: 20px; align-items: flex-start;"> 
-                        <h1 class="title">Marla</h1>
-                        <p class="marketing-text">A simple, customisable <br>chatbot for small businesses.</p>
-                    </div> 
-                    <div style="display: flex; flex-direction: column; padding: 20px; align-items: flex-start;"> 
-                        <form id="loginForm" method="post">
-                            {% csrf_token %}
-                            <div style="display: flex; flex-direction: column; align-items: center;">
-                               
-                                <div id="login-form" class="input-group mb-3" style="margin-top: 25px; display: flex; align-items: center;">
-                                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" aria-label="Email">
-                                    <button type="submit" class="btn flat-button" style="margin-left: 25px;">Login</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>  
-                </div>
-                
-            </div>
-
-            <div style="display: flex; margin-top: 0px; width: 100%; justify-content: center;" >
-                <div style="display: flex; width: 60%; padding: 20px;">                     
-                    <div style="display: flex; flex-direction: column; align-items: center; padding: 35px; ">
-                        <img src="https://img.icons8.com/cotton/64/null/talk.png" style="margin-bottom: 20px;"/>
-                        <div class="box-title">A breeze to talk to</div>
-                        <div class="box-text">
-                            Built on the latest advances in natural language processing, it's easy and natural to talk to. No more of those clunky interfaces, Marla gives your customers a smooth  experience.
-                        </div>
-                    </div> 
-                    <div style="display: flex; flex-direction: column; align-items: center; padding: 35px; ">
-                        <img src="https://img.icons8.com/cotton/64/null/vertical-settings-mixer.png" style="margin-bottom: 20px;"/>
-                        <div class="box-title">You're in control</div>
-                        <div class="box-text">
-                            You decide what knowledge the chatbot can draw upon when talking to your customers, by naming it and giving it it's own conversational style, you can make it unique to your business .
-                        </div>
-                    </div>
-                </div> 
-            </div>   
+        <!-- Title -->
+        <div class="title-box">
+            <h1 class="title">Marla</h1>
+            <p class="marketing-text">A simple, configurable <br>chatbot for your website.</p>
+        </div>           
             
-            <div style="display: flex; flex-direction: column; align-items: center; margin-top: 50px;"> 
-                <div id="question-container" class="marketing-text"></div>       
-                <div id="answer-container" class="answer-text"></div>
-                <input type="text" id="question-input" class="form-control" placeholder="Ask us a question..." aria-label="Question" style="margin-top: 30px; width: 300px;">
-                <button id="submit-question" class="btn flat-button" style="margin-top: 20px; width: 100px;" type="button">Try It</button>
-            </div>        
-        </div>
-        
-        
-        
+        <div class="space-around">
+
+            <!-- Login -->       
+            <form id="loginForm" method="post">
+                {% csrf_token %}
+                <div class="vertical-stack section">
+                    <p class="center-text"><b>Enter your email to get started</b></p>
+                    <div id="login-form" class="horizontal-stack" style="margin-top: 15px;">
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" aria-label="Email">
+                        <button type="submit" class="btn flat-button" style="margin-left: 25px;">Portal</button>
+                    </div>
+                </div>
+            </form>  
+
+        </div>     
     </div>
 </div>
 
@@ -285,7 +101,7 @@
         const submitButton = document.getElementById('submit-question');
         
         // Default question and answer.
-        displayAnswer("<p>Take it for a spin.</p>", "<p>Marla is a chatbot that combines the latest in natural language processing, with a customised knowledge base that you provide, to answer questions from your customers.</p>");
+        displayAnswer("<p>Take it for a spin.</p>", "<p></p>");
         
         submitButton.addEventListener('click', async () => {
 
