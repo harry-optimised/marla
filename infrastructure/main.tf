@@ -43,22 +43,17 @@ resource "aws_security_group" "ec2_sg" {
 }
 
 resource "aws_db_instance" "rds_instance" {
-  allocated_storage    = 10
-  storage_type         = "gp2"
-  engine               = "postgres"
-  engine_version       = "13.3"
+  engine               = "mysql"
+  identifier           = "marla"
+  allocated_storage    =  10
+  engine_version       = "5.7"
   instance_class       = var.rds_instance_class
-  name                 = var.db_name
   username             = var.db_username
   password             = var.db_password
-  multi_az             = false
-  publicly_accessible  = false
-
-  vpc_security_group_ids = [aws_security_group.rds_sg.id]
-
-  tags = {
-    Name = "Chatbot_API_RDS_Instance"
-  }
+  parameter_group_name = "default.mysql5.7"
+  vpc_security_group_ids = ["${aws_security_group.rds_sg.id}"]
+  skip_final_snapshot  = true
+  publicly_accessible =  true
 }
 
 resource "aws_security_group" "rds_sg" {
@@ -82,5 +77,23 @@ resource "aws_security_group" "rds_sg" {
 
 resource "aws_key_pair" "my_key" {
   key_name   = "my_key_pair"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = file("~/.ssh/marla_instance_1.pub")
+}
+
+resource "aws_eip" "eip" {
+  instance = aws_instance.ec2_instance.id
+  domain      = "vpc"
+}
+
+
+data "aws_route53_zone" "existing" {
+  name = "harrysprojects.com"
+}
+
+resource "aws_route53_record" "my_a_record" {
+  zone_id = data.aws_route53_zone.existing.zone_id
+  name    = var.subdomain
+  type    = "A"
+  ttl     = "300"
+  records = [aws_eip.eip.public_ip]
 }
