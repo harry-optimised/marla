@@ -140,9 +140,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Email
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = "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"
+SENDGRID_API_KEY = ""
 
 # Authentication
 AUTH_USER_MODEL = "accounts.User"
-STRIPE_SECRET_KEY = "sk_test_51N5VPxH451kFmPn70Vs8i9mQzusgKWPMTPlxLuqqwCgtCYgg3woiXtqbe4AdpJW8RUrqc0eiROvT0wfIKQu8KA0c00Km1NlJNl"
-STRIPE_WEBHOOK_SECRET = "whsec_562d3b7b116db5a616ece36a03e66ffad2c5e0a75da71b91417ef83eb8a6a53c"
+STRIPE_SECRET_KEY = ""
+STRIPE_WEBHOOK_SECRET = ""
